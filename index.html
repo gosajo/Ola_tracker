@@ -94,7 +94,19 @@ table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;p
 <div class="card"><h2>Your reminders</h2><div id="serviceHistory" class="muted">No reminders yet.</div></div>
 </section>
 <section id="stats" class="tab hidden">
-<div class="card"><div class="toolbar"><h2>Performance statistics</h2><input style="max-width:155px" type="month" id="statsMonth"></div><div class="grid"><div class="metric"><small>Lifetime distance</small><strong id="statLifetime">0 km</strong></div><div class="metric"><small>This month</small><strong id="statMonth">0 km</strong></div><div class="metric"><small>Average efficiency</small><strong id="statEfficiency">—</strong></div><div class="metric"><small>Estimated savings</small><strong id="statSavings">₹0</strong></div></div><h3 style="margin-top:18px">Monthly kilometres</h3><div id="monthBars"></div><p class="muted">Petrol savings are estimates using the editable petrol price and assumed petrol mileage.</p><button class="primary" id="makePdf">Generate monthly PDF</button></div>
+<div class="card">
+  <div class="toolbar" style="flex-wrap:wrap"><h2>Advanced statistics</h2><select id="statsScope" aria-label="Statistics vehicle" style="max-width:230px"><option value="selected">Selected vehicle</option><option value="all">Ola and Punch · Combined</option></select></div>
+  <div class="row" style="margin-top:12px"><div><label for="statsMonth">Month</label><input type="month" id="statsMonth"></div><div><label for="statsYear">Year</label><select id="statsYear"></select></div></div>
+  <h3 style="margin-top:18px">Monthly summary</h3>
+  <div class="grid"><div class="metric"><small>Distance</small><strong id="statMonth">0 km</strong></div><div class="metric"><small>Electricity used</small><strong id="statMonthEnergy">0 kWh</strong></div><div class="metric"><small>Charging cost</small><strong id="statMonthCost">₹0</strong></div><div class="metric"><small>Efficiency</small><strong id="statMonthEfficiency">—</strong></div><div class="metric"><small>Rides / charges</small><strong id="statMonthRides">0</strong></div><div class="metric"><small>Estimated savings</small><strong id="statSavings">₹0</strong></div></div>
+  <h3 style="margin-top:22px">Yearly summary</h3>
+  <div class="grid"><div class="metric"><small>Year distance</small><strong id="statYearDistance">0 km</strong></div><div class="metric"><small>Electricity used</small><strong id="statYearEnergy">0 kWh</strong></div><div class="metric"><small>Charging cost</small><strong id="statYearCost">₹0</strong></div><div class="metric"><small>Average efficiency</small><strong id="statYearEfficiency">—</strong></div><div class="metric"><small>Estimated petrol cost</small><strong id="statYearPetrol">₹0</strong></div><div class="metric"><small>Estimated savings</small><strong id="statYearSavings">₹0</strong></div></div>
+  <h3 style="margin-top:22px">Monthly distance in selected year</h3><div id="monthBars"></div>
+  <h3 style="margin-top:22px">Efficiency highlights</h3><div id="efficiencyHighlights" class="muted">No data yet.</div>
+  <div id="vehicleBreakdown" style="margin-top:20px"></div>
+  <p class="muted">All figures are calculated from saved ride records. Petrol-equivalent cost and savings are estimates using each vehicle's saved petrol mileage and petrol price. A missing or zero mileage is excluded from petrol estimates.</p>
+  <div class="row"><button class="primary" id="makePdf" type="button">Generate monthly PDF</button><button class="btn" id="makeYearPdf" type="button">Generate yearly PDF</button></div>
+</div>
 </section>
 <section id="profile" class="tab hidden">
 <div class="card"><h2>Vehicle profiles</h2><div id="vehicleList"></div><h3 style="margin-top:18px">Add another vehicle</h3><form id="vehicleForm"><label>Vehicle name</label><input id="newVehicleName" placeholder="e.g. Tata Punch EV" required><label>Registration number</label><input id="newVehicleReg" placeholder="e.g. TN 00 AB 1234"><button class="primary">Add vehicle</button></form></div>
