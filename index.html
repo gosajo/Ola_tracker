@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f5f1"><link rel="manifest" href="manifest.json">
+<title>RideLog</title>
+<style>
+:root{--bg:#f3f4f0;--panel:#fff;--soft:#e9eee8;--ink:#202722;--muted:#727b73;--line:#e3e8e1;--accent:#527b65;--accent2:#dce9df;--danger:#a84e48;--shadow:0 2px 12px #18251b0a}
+[data-theme=dark]{--bg:#101311;--panel:#1a201c;--soft:#252d27;--ink:#edf1ed;--muted:#a0aaa2;--line:#303a33;--accent:#91b69c;--accent2:#293d30;--danger:#f08b80;--shadow:none}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{max-width:1100px;margin:auto;padding:18px 16px 8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:800;letter-spacing:.2px;font-size:19px}.sub{font-size:12px;color:var(--muted);margin-top:2px}
+main{max-width:1100px;margin:auto;padding:8px 14px 100px}
+.vehicle-chip{background:var(--accent2);border:0;border-radius:30px;padding:9px 13px;color:var(--ink);font-weight:700}
+nav{display:flex;gap:6px;overflow:auto;padding:9px 0 12px;position:sticky;top:0;background:var(--bg);z-index:5}
+nav button,.btn{border:1px solid transparent;background:var(--soft);color:var(--ink);padding:10px 13px;border-radius:12px;font:inherit;font-weight:650;white-space:nowrap}
+nav button.active,.primary{background:var(--accent);color:#fff}
+[data-theme=dark] nav button.active,[data-theme=dark] .primary{color:#101711}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin:10px 0;box-shadow:var(--shadow)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.metric{background:var(--soft);border-radius:14px;padding:13px}.metric small{color:var(--muted);display:block}.metric strong{font-size:21px;display:block;margin-top:4px}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 10px}
+.muted{color:var(--muted);font-size:13px}.big{font-size:29px;font-weight:800;letter-spacing:-1px}
+label{display:block;font-size:13px;font-weight:650;margin:11px 0 5px}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--ink);font:inherit}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{cursor:pointer}.primary{border:0;padding:12px 16px;border-radius:12px;font-weight:750;margin-top:12px}
+.iconbtn{border:0;background:var(--soft);color:var(--ink);border-radius:10px;padding:7px 10px;font-size:16px}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.entry{border-top:1px solid var(--line);padding:12px 0}.entry:first-child{border-top:0}
+.hidden{display:none!important}.pill{font-size:11px;padding:4px 8px;border-radius:20px;background:var(--accent2);color:var(--ink)}
+.ringwrap{display:flex;align-items:center;gap:16px}.ring{width:112px;height:112px;flex:0 0 112px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) var(--p),var(--soft) 0);position:relative}
+.ring:before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--panel)}.ring span{position:relative;font-size:25px;font-weight:800}
+.layout{display:grid;grid-template-columns:1fr;gap:10px}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:10}
+.bottom button{border:0;background:transparent;color:var(--muted);font-size:11px;padding:5px 8px;display:grid;gap:3px;justify-items:center}.bottom button.active{color:var(--accent);font-weight:800}.bottom b{font-size:18px}
+.bar{height:9px;background:var(--soft);border-radius:20px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);border-radius:20px}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
+@media(min-width:720px){main{padding:12px 24px 40px}.grid{grid-template-columns:repeat(4,1fr)}.layout{grid-template-columns:1.1fr .9fr}.bottom{position:static;max-width:1100px;margin:auto;border:0;background:transparent;justify-content:flex-start;gap:8px;padding:0 24px 20px}.bottom button{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 18px;font-size:13px;display:flex;gap:8px}header{padding:22px 24px 8px}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">RideLog</div><div class="sub">Your electric vehicle logbook</div></div><div class="toolbar"><button class="vehicle-chip" id="vehicleSwitch">Ola S1 X ▾</button><button class="iconbtn" id="themeToggle" aria-label="Toggle theme">☾</button></div></header>
+<main>
+<nav id="tabs"><button class="active" data-tab="home">Home</button><button data-tab="rides">Rides</button><button data-tab="service">Service</button><button data-tab="stats">Stats</button><button data-tab="profile">Profile</button></nav>
+<section id="home" class="tab">
+<div class="card">
+<div class="ringwrap"><div class="ring" id="batteryRing" style="--p:0%"><span id="batteryText">—%</span></div><div><div class="muted">Battery at last charge</div><div style="font-weight:750" id="lastChargeDate">No charge logged yet</div><div class="muted" style="margin-top:8px">Current battery after last recorded ride</div><div class="big" id="remainingBattery">—%</div></div></div>
+</div>
+<div class="grid">
+<div class="metric"><small>Current odometer</small><strong id="homeOdo">— km</strong></div>
+<div class="metric"><small>Ride from last charge</small><strong id="homeDistance">— km</strong></div>
+<div class="metric"><small>Previous average efficiency</small><strong id="homeEfficiency">— km/kWh</strong></div>
+<div class="metric"><small>Average cost per km</small><strong id="homeCostKm">—</strong></div>
+</div>
+<div class="layout">
+<div class="card"><div class="toolbar"><h3>Last recorded ride</h3><span class="pill" id="rideCount">0 entries</span></div><div class="grid"><div><div class="muted">Energy used</div><b id="homeUnits">— kWh</b></div><div><div class="muted">Electricity cost</div><b id="homeCost">—</b></div></div><button class="primary" style="width:100%" onclick="showTab('rides')">＋ Log ride</button></div>
+<div class="card"><h3>Next service</h3><div id="nextService" class="muted">No reminders set. Add one in Service.</div><button class="btn" onclick="showTab('service')">View reminders</button></div>
+</div>
+</section>
+<section id="rides" class="tab hidden">
+<div class="layout">
+<div class="card"><h2 id="rideFormTitle">Log ride / charge</h2><form id="rideForm"><input type="hidden" id="rideId">
+<label>Last charged date</label><input type="date" id="chargeDate" required>
+<div class="row"><div><label>Battery from (%)</label><input id="batteryFrom" type="number" min="0" max="100" required></div><div><label>Battery to (%)</label><input id="batteryTo" type="number" min="0" max="100" required></div></div>
+<label>Current odometer (km)</label><input id="currentOdo" type="number" min="0" step=".1" required>
+<label>Electricity used (kWh)</label><input id="energy" type="number" min="0" step=".01" required>
+<div class="row"><div><label>Petrol rate (₹/litre) <button type="button" class="iconbtn" onclick="editRates()">✎</button></label><input id="petrolRate" type="number" min="0" step=".01"></div><div><label>Electricity rate (₹/kWh) <button type="button" class="iconbtn" onclick="editRates()">✎</button></label><input id="electricRate" type="number" min="0" step=".01"></div></div>
+<label>Notes (optional)</label><input id="rideNotes" maxlength="160" placeholder="Route or charging notes">
+<button class="primary" type="submit" id="rideSave" style="width:100%">Save ride</button><button class="btn hidden" type="button" id="rideCancel">Cancel edit</button></form>
+</div>
+<div class="card"><h3>Calculated for this ride</h3><div class="grid"><div class="metric"><small>Distance</small><strong id="calcDistance">— km</strong></div><div class="metric"><small>Efficiency</small><strong id="calcEfficiency">—</strong></div><div class="metric"><small>Charging cost</small><strong id="calcCost">—</strong></div><div class="metric"><small>Cost per km</small><strong id="calcCostKm">—</strong></div></div><p class="muted">Distance is calculated from the previously saved odometer to the current odometer. Enter the current odometer only; it becomes the starting point for the next ride.</p></div>
+</div>
+<div class="card"><h2>Ride history</h2><input id="rideSearch" placeholder="Search by date or notes"><div id="rideHistory" class="muted">No rides recorded.</div></div>
+</section>
+<section id="service" class="tab hidden">
+<div class="layout"><div class="card"><h2>Add service reminder</h2><form id="serviceForm"><label>Reminder name</label><input id="serviceName" placeholder="e.g. Chain lubrication" required><div class="row"><div><label>Remind at odometer (km)</label><input id="serviceAtOdo" type="number" min="0" placeholder="e.g. 13000"></div><div><label>Repeat interval (km)</label><input id="serviceEveryKm" type="number" min="0" placeholder="e.g. 500"></div></div><div class="row"><div><label>Next due date (optional)</label><input id="serviceDueDate" type="date"></div><div><label>Repeat every (days)</label><input id="serviceEveryDays" type="number" min="0" placeholder="e.g. 90"></div></div><button class="primary" style="width:100%">Add reminder</button></form></div><div class="card"><h3>Reminder logic</h3><p class="muted">Reminders compare the due odometer with the latest odometer saved in Rides. You can edit the target and interval at any time. Date reminders are also shown here.</p></div></div>
+<div class="card"><h2>Your reminders</h2><div id="serviceHistory" class="muted">No reminders yet.</div></div>
+</section>
+<section id="stats" class="tab hidden">
+<div class="card"><div class="toolbar"><h2>Performance statistics</h2><input style="max-width:155px" type="month" id="statsMonth"></div><div class="grid"><div class="metric"><small>Lifetime distance</small><strong id="statLifetime">0 km</strong></div><div class="metric"><small>This month</small><strong id="statMonth">0 km</strong></div><div class="metric"><small>Average efficiency</small><strong id="statEfficiency">—</strong></div><div class="metric"><small>Estimated savings</small><strong id="statSavings">₹0</strong></div></div><h3 style="margin-top:18px">Monthly kilometres</h3><div id="monthBars"></div><p class="muted">Petrol savings are estimates using the editable petrol price and assumed petrol mileage.</p><button class="primary" id="makePdf">Generate monthly PDF</button></div>
+</section>
+<section id="profile" class="tab hidden">
+<div class="card"><h2>Vehicle profiles</h2><div id="vehicleList"></div><h3 style="margin-top:18px">Add another vehicle</h3><form id="vehicleForm"><label>Vehicle name</label><input id="newVehicleName" placeholder="e.g. Tata Punch EV" required><label>Registration number</label><input id="newVehicleReg" placeholder="e.g. TN 00 AB 1234"><button class="primary">Add vehicle</button></form></div>
+<div class="card"><h2>Profile & data</h2><label>Selected vehicle name</label><input id="profileName"><label>Registration number</label><input id="profileReg"><label>Assumed petrol vehicle mileage (km/litre)</label><input id="petrolMileage" type="number" min="0" step=".1"><button class="primary" id="saveProfile">Save profile</button><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><button class="btn" id="exportData">Export all vehicle data</button> <label class="btn" for="importFile" style="display:inline-block">Import backup</label><input class="hidden" id="importFile" type="file" accept="application/json"><p class="muted">Data is stored locally in this browser on this device. Export backups regularly. Browser data clearing can erase it. PIN protection and cloud sync are not yet included.</p></div>
+</section>
+</main>
+<div class="bottom" id="bottomNav"><button class="active" data-tab="home"><b>⌂</b>Home</button><button data-tab="rides"><b>↗</b>Rides</button><button data-tab="service"><b>⚒</b>Service</button><button data-tab="stats"><b>▥</b>Stats</button><button data-tab="profile"><b>♙</b>Profile</button></div>
+<script src="app.js"></script>
+</body></html>
