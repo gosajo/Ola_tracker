@@ -32,3 +32,5 @@ Distance is calculated from chronological odometer readings for each vehicle ind
 Basic checks performed
 - JavaScript syntax check passed.
 - All statically referenced app element IDs were found in index.html.
+
+V6.1.1 hotfix: restores V5-compatible energy recalculation at startup and makes Home readings tolerant of older saved numeric values. Keep the same GitHub Pages origin and browser storage.
