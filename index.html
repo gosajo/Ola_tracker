@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f4f5f1"><link rel="manifest" href="manifest.json">
+<title>RideLog</title>
+<style>
+:root{--bg:#fff;--panel:#fff;--soft:#f1f4f1;--ink:#202722;--muted:#727b73;--line:#e7ebe7;--accent:#638b74;--accent2:#e5eee7;--danger:#a84e48;--shadow:0 2px 12px #18251b08}
+[data-theme=dark]{--bg:#101311;--panel:#1a201c;--soft:#252d27;--ink:#edf1ed;--muted:#a0aaa2;--line:#303a33;--accent:#91b69c;--accent2:#293d30;--danger:#f08b80;--shadow:none}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+header{max-width:1100px;margin:auto;padding:18px 16px 8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-weight:800;letter-spacing:.2px;font-size:19px}.sub{font-size:12px;color:var(--muted);margin-top:2px}
+main{max-width:1100px;margin:auto;padding:8px 14px 100px}
+.vehicle-chip{background:var(--accent2);border:0;border-radius:30px;padding:9px 13px;color:var(--ink);font-weight:700}
+nav{display:flex;gap:6px;overflow:auto;padding:9px 0 12px;position:sticky;top:0;background:var(--bg);z-index:5}
+nav button,.btn{border:1px solid transparent;background:var(--soft);color:var(--ink);padding:10px 13px;border-radius:12px;font:inherit;font-weight:650;white-space:nowrap}
+nav button.active,.primary{background:var(--accent);color:#fff}
+[data-theme=dark] nav button.active,[data-theme=dark] .primary{color:#101711}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin:10px 0;box-shadow:var(--shadow)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.metric{background:var(--soft);border-radius:14px;padding:13px}.metric small{color:var(--muted);display:block}.metric strong{font-size:21px;display:block;margin-top:4px}
+h2{font-size:18px;margin:0 0 12px}h3{font-size:15px;margin:0 0 10px}
+.muted{color:var(--muted);font-size:13px}.big{font-size:29px;font-weight:800;letter-spacing:-1px}
+label{display:block;font-size:13px;font-weight:650;margin:11px 0 5px}
+input:not([type=range]),select{width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--ink);font:inherit}
+input[type=range]{width:100%;height:34px;margin:4px 0;appearance:none;background:transparent;accent-color:var(--accent);touch-action:pan-y}
+input[type=range]::-webkit-slider-runnable-track{height:7px;border-radius:20px;background:linear-gradient(90deg,var(--accent2),#dce5de)}
+input[type=range]::-webkit-slider-thumb{appearance:none;width:25px;height:25px;border-radius:50%;background:#fff;border:1px solid #d9e0da;box-shadow:0 1px 5px #18251b30;margin-top:-9px}
+input[type=range]::-moz-range-track{height:7px;border-radius:20px;background:var(--accent2)}
+input[type=range]::-moz-range-thumb{width:23px;height:23px;border-radius:50%;background:#fff;border:1px solid #d9e0da;box-shadow:0 1px 5px #18251b30}
+.slider-value{font-size:19px;font-weight:800;text-align:right;color:var(--ink);font-variant-numeric:tabular-nums}
+.slider-block{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:8px}
+.battery-pair{display:flex;align-items:center;gap:18px;flex-wrap:wrap}.battery-single{display:flex;align-items:center;gap:18px;flex-wrap:wrap}.battery-legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:7px}.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}.legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block}.ring.dual{background:conic-gradient(#638b74 0 var(--charged),#e4a34a var(--charged) var(--total),var(--soft) var(--total) 100%)}[data-theme=dark] .ring.dual{background:conic-gradient(#91b69c 0 var(--charged),#e4a34a var(--charged) var(--total),var(--soft) var(--total) 100%)}.date-select{display:grid;grid-template-columns:1fr 1.35fr 1.1fr;gap:7px;background:var(--accent2);border:1px solid var(--line);border-radius:14px;padding:7px}.date-select select{min-width:0;padding:9px 7px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--ink);font:inherit;font-size:13px}
+.battery-item{display:grid;justify-items:center;gap:4px;min-width:88px}
+.battery-item .ring{width:88px;height:88px;flex-basis:88px}
+.battery-item .ring:before{inset:7px}
+.battery-item .ring span{font-size:20px}
+.history-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.history-toggle{border:1px solid var(--line);border-radius:50%;width:38px;height:38px;background:var(--accent2);color:var(--accent);font-size:0;display:grid;place-items:center;box-shadow:0 2px 5px #18251b0d}.history-toggle:before{content:"";width:9px;height:9px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform .18s}.history-toggle[aria-expanded="true"]:before{transform:translateY(2px) rotate(225deg)}
+.history-detail{padding:10px 0 0 2px}
+.icon-action{border:0;border-radius:10px;background:var(--soft);color:var(--ink);width:36px;height:34px;font-size:17px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.date-pick{display:flex;align-items:center;gap:8px;background:var(--accent2);border:1px solid var(--line);border-radius:18px;padding:5px 10px;color:var(--ink);max-width:100%}.date-pick input{border:0!important;background:transparent!important;padding:7px 2px!important;font-size:13px!important;min-width:0}.date-pick input::-webkit-calendar-picker-indicator{cursor:pointer}.service-readings{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:12px 0}.service-readings label{font-size:10px;letter-spacing:.2px;text-transform:uppercase;color:var(--muted);margin:0 0 4px}.service-readings input{padding:9px 5px!important;text-align:center;font-size:14px!important;border-radius:12px!important;background:var(--panel)!important}.service-slider{background:var(--soft);border:1px solid var(--line);border-radius:13px;padding:8px 11px;margin:8px 0}.service-slider .toolbar{font-size:12px}.service-slider input[type=range]{margin:0}.service-slider input[type=range]::-webkit-slider-thumb{width:23px;height:23px;margin-top:-8px}
+button{cursor:pointer}.primary{border:0;padding:12px 16px;border-radius:12px;font-weight:750;margin-top:12px}
+.iconbtn{border:0;background:var(--soft);color:var(--ink);border-radius:10px;padding:7px 10px;font-size:16px}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.entry{border-top:1px solid var(--line);padding:12px 0}.entry:first-child{border-top:0}
+.hidden{display:none!important}.pill{font-size:11px;padding:4px 8px;border-radius:20px;background:var(--accent2);color:var(--ink)}
+.ringwrap{display:flex;align-items:center;gap:16px}.ring{width:112px;height:112px;flex:0 0 112px;border-radius:50%;display:grid;place-items:center;background:conic-gradient(var(--accent) var(--p),var(--soft) 0);position:relative}
+.ring:before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--panel)}.ring span{position:relative;font-size:25px;font-weight:800}
+.layout{display:grid;grid-template-columns:1fr;gap:10px}.toolbar{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 4px calc(8px + env(safe-area-inset-bottom));z-index:10}
+.bottom button{border:0;background:transparent;color:var(--muted);font-size:11px;padding:5px 8px;display:grid;gap:3px;justify-items:center}.bottom button.active{color:var(--accent);font-weight:800}.bottom b{font-size:18px}
+.bar{height:9px;background:var(--soft);border-radius:20px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);border-radius:20px}
+table{width:100%;border-collapse:collapse;font-size:13px}td,th{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}
+@media(min-width:720px){main{padding:12px 24px 40px}.grid{grid-template-columns:repeat(4,1fr)}.layout{grid-template-columns:1.1fr .9fr}.bottom{position:static;max-width:1100px;margin:auto;border:0;background:transparent;justify-content:flex-start;gap:8px;padding:0 24px 20px}.bottom button{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 18px;font-size:13px;display:flex;gap:8px}header{padding:22px 24px 8px}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">RideLog</div><div class="sub">Your electric vehicle logbook</div></div><div class="toolbar"><button class="vehicle-chip" id="vehicleSwitch">Ola S1 X ▾</button><button class="iconbtn" id="themeToggle" aria-label="Toggle theme">☾</button></div></header>
+<main>
+
+<section id="home" class="tab">
+<div class="card">
+<div class="battery-single"><div class="ring dual" id="batteryRing" style="--charged:0%;--total:0%"><span id="batteryText">—%</span></div><div style="flex:1;min-width:130px"><div style="font-weight:750" id="lastChargeDate">L.C. —</div><div class="battery-legend"><span class="legend-item"><i class="legend-dot" style="background:#638b74"></i>Battery</span><span class="legend-item"><i class="legend-dot" style="background:#e4a34a"></i>Used</span></div></div></div>
+</div>
+<div class="grid">
+<div class="metric"><small>Current Odo</small><strong id="homeOdo">— km</strong></div>
+<div class="metric"><small>Last ride</small><strong id="homeDistance">— km</strong></div>
+<div class="metric"><small>P.A.E.</small><strong id="homeEfficiency">— km/kWh</strong></div>
+<div class="metric"><small>Cost/K.M.</small><strong id="homeCostKm">—</strong></div>
+</div>
+<div class="layout">
+<div class="card"><div class="toolbar"><h3>Last recorded ride</h3><span class="pill" id="rideCount">0 entries</span></div><div class="grid"><div><div class="muted">Energy used</div><b id="homeUnits">— kWh</b></div><div><div class="muted">Electricity cost</div><b id="homeCost">—</b></div></div><button class="primary" style="width:100%" onclick="showTab('rides')">＋ Log ride</button></div>
+<div class="card"><h3>Next service</h3><div id="nextService" class="muted">No reminders set. Add one in Service.</div><button class="btn" onclick="showTab('service')">View reminders</button></div>
+</div>
+</section>
+<section id="rides" class="tab hidden">
+<div class="layout">
+<div class="card"><h2 id="rideFormTitle">Log ride / charge</h2><form id="rideForm"><input type="hidden" id="rideId">
+<label>Last charged date</label><div class="date-select" aria-label="Choose ride date"><select id="chargeDay" aria-label="Day"></select><select id="chargeMonth" aria-label="Month"></select><select id="chargeYear" aria-label="Year"></select></div><input type="hidden" id="chargeDate">
+<div class="row"><div><label>Battery from (%)</label><div class="slider-block"><div class="slider-value" id="batteryFromValue">0%</div><input id="batteryFrom" type="range" min="0" max="100" step="1" value="0" required></div></div><div><label>Battery to (%)</label><div class="slider-block"><div class="slider-value" id="batteryToValue">0%</div><input id="batteryTo" type="range" min="0" max="100" step="1" value="0" required></div></div></div>
+<label>Current Odo (km)</label><div class="slider-block"><div class="slider-value" id="currentOdoValue">0 km</div><input id="currentOdo" type="range" min="0" max="180" step="0.1" value="0" required><small class="muted" id="odoRangeHint">Slide up to 180 km from the previous reading</small></div>
+<label>Estimated electricity used (kWh) · calculated automatically</label><input id="energy" type="number" min="0" step=".01" readonly><small class="muted">Based on battery percentage used, battery capacity and estimated charging losses.</small>
+<div class="row"><div><label>Fuel Price (₹/litre) <button type="button" class="iconbtn" onclick="editRates()">✎</button></label><input id="petrolRate" type="number" min="0" step=".01"></div><div><label>Electricity Price (₹/kWh) <button type="button" class="iconbtn" onclick="editRates()">✎</button></label><input id="electricRate" type="number" min="0" step=".01"></div></div>
+<label>Notes (optional)</label><input id="rideNotes" maxlength="160" placeholder="Route or charging notes">
+<button class="primary" type="submit" id="rideSave" style="width:100%">Save</button><button class="btn hidden" type="button" id="rideCancel">Cancel edit</button></form>
+</div>
+<div class="card"><h3>Calculated for this ride</h3><div class="grid"><div class="metric"><small>Distance</small><strong id="calcDistance">— km</strong></div><div class="metric"><small>Efficiency</small><strong id="calcEfficiency">—</strong></div><div class="metric"><small>Charging cost</small><strong id="calcCost">—</strong></div><div class="metric"><small>Cost per km</small><strong id="calcCostKm">—</strong></div></div><p class="muted">Distance is calculated from the previously saved odometer to the current odometer. Enter the current odometer only; it becomes the starting point for the next ride.</p></div>
+</div>
+<div class="card"><h2>Search</h2><input id="rideSearch" placeholder="Search by date or notes"><div id="rideHistory" class="muted">No rides recorded.</div></div>
+</section>
+<section id="service" class="tab hidden">
+<div class="layout"><div class="card"><h2>Add service reminder</h2><form id="serviceForm"><label>Reminder name</label><input id="serviceName" placeholder="e.g. Chain lubrication" required><div class="service-slider"><div class="toolbar"><span>Remind at odometer</span><b id="serviceAtOdoValue">0 km</b></div><input id="serviceAtOdoSlider" type="range" min="0" max="50000" step="10" value="0"></div><div class="service-slider"><div class="toolbar"><span>Repeat interval</span><b id="serviceEveryKmValue">0 km</b></div><input id="serviceEveryKmSlider" type="range" min="0" max="10000" step="10" value="0"></div><div class="service-readings"><div><label>At Odo</label><input id="serviceAtOdo" type="number" min="0" placeholder="km"></div><div><label>Every km</label><input id="serviceEveryKm" type="number" min="0" placeholder="km"></div><div><label>Every days</label><input id="serviceEveryDays" type="number" min="0" placeholder="days"></div></div><label>Next due date (optional)</label><div class="date-pick"><span aria-hidden="true">◷</span><input id="serviceDueDate" type="date"></div><button class="primary" style="width:100%">Add reminder</button></form></div><div class="card"><h3>Reminder logic</h3><p class="muted">Reminders compare the due odometer with the latest odometer saved in Rides. You can edit the target and interval at any time. Date reminders are also shown here.</p></div></div>
+<div class="card"><h2>Your reminders</h2><div id="serviceHistory" class="muted">No reminders yet.</div></div>
+</section>
+<section id="stats" class="tab hidden">
+<div class="card">
+  <div class="toolbar" style="flex-wrap:wrap"><h2>Advanced statistics</h2><select id="statsScope" aria-label="Statistics vehicle" style="max-width:230px"></select></div>
+  <div class="row" style="margin-top:12px"><div><label for="statsMonth">Month</label><input type="month" id="statsMonth"></div><div><label for="statsYear">Year</label><select id="statsYear"></select></div></div>
+  <h3 style="margin-top:18px">Monthly summary</h3>
+  <div class="grid"><div class="metric"><small>Distance</small><strong id="statMonth">0 km</strong></div><div class="metric"><small>Electricity used</small><strong id="statMonthEnergy">0 kWh</strong></div><div class="metric"><small>Charging cost</small><strong id="statMonthCost">₹0</strong></div><div class="metric"><small>Efficiency</small><strong id="statMonthEfficiency">—</strong></div><div class="metric"><small>Rides / charges</small><strong id="statMonthRides">0</strong></div><div class="metric"><small>Estimated savings</small><strong id="statSavings">₹0</strong></div></div>
+  <h3 style="margin-top:22px">Yearly summary</h3>
+  <div class="grid"><div class="metric"><small>Year distance</small><strong id="statYearDistance">0 km</strong></div><div class="metric"><small>Electricity used</small><strong id="statYearEnergy">0 kWh</strong></div><div class="metric"><small>Charging cost</small><strong id="statYearCost">₹0</strong></div><div class="metric"><small>Average efficiency</small><strong id="statYearEfficiency">—</strong></div><div class="metric"><small>Estimated petrol cost</small><strong id="statYearPetrol">₹0</strong></div><div class="metric"><small>Estimated savings</small><strong id="statYearSavings">₹0</strong></div></div>
+  <h3 style="margin-top:22px">Monthly distance in selected year</h3><div id="monthBars"></div>
+  <h3 style="margin-top:22px">Efficiency highlights</h3><div id="efficiencyHighlights" class="muted">No data yet.</div>
+  <div id="vehicleBreakdown" style="margin-top:20px"></div>
+  <p class="muted">All figures are calculated from saved ride records. Petrol-equivalent cost and savings are estimates using each vehicle's saved petrol mileage and petrol price. A missing or zero mileage is excluded from petrol estimates.</p>
+  <div class="row"><button class="primary" id="makePdf" type="button">Generate monthly PDF</button><button class="btn" id="makeYearPdf" type="button">Generate yearly PDF</button></div>
+</div>
+</section>
+<section id="profile" class="tab hidden">
+<div class="card"><h2>Vehicle profiles</h2><div id="vehicleList"></div><h3 style="margin-top:18px">Add another vehicle</h3><form id="vehicleForm"><label>Vehicle name</label><input id="newVehicleName" placeholder="e.g. Tata Punch EV" required><label>Registration number</label><input id="newVehicleReg" placeholder="e.g. TN 00 AB 1234"><button class="primary">Add vehicle</button></form></div>
+<div class="card"><h2>Profile & data</h2><label>Selected vehicle name</label><input id="profileName"><label>Registration number</label><input id="profileReg"><label>Assumed petrol vehicle mileage (km/litre)</label><input id="petrolMileage" type="number" min="0" step=".1"><label>Battery capacity (kWh)</label><input id="batteryCapacity" type="number" min="0.1" step=".1"><label>Maximum range per charge (km)</label><input id="maxRange" type="number" min="1" step="1"><label>Charging efficiency (%)</label><input id="chargeEfficiency" type="number" min="1" max="100" step="1"><small class="muted">Default: 4 kWh battery and 90% charging efficiency. Change these if your vehicle specification or measured charging losses differ.</small><button class="primary" id="saveProfile">Save profile</button><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><button class="btn" id="exportData">Export all vehicle data</button> <label class="btn" for="importFile" style="display:inline-block">Import backup</label><input class="hidden" id="importFile" type="file" accept="application/json"><p class="muted">Data is stored locally in this browser on this device. Export backups regularly. Browser data clearing can erase it. PIN protection and cloud sync are not yet included.</p></div>
+</section>
+</main>
+<div class="bottom" id="bottomNav"><button class="active" data-tab="home"><b>⌂</b>Home</button><button data-tab="rides"><b>↗</b>Rides</button><button data-tab="service"><b>⚒</b>Service</button><button data-tab="stats"><b>▥</b>Stats</button><button data-tab="profile"><b>♙</b>Profile</button></div>
+<script src="app.js"></script>
+</body></html>
