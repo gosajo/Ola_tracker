@@ -1,11 +1,11 @@
 {
-  "name": "RideLog \u2013 EV Tracker",
+  "name": "RideLog – EV Tracker",
   "short_name": "RideLog",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#f3f4f0",
-  "theme_color": "#f3f4f0",
-  "description": "Local electric vehicle ride, charging and service logbook",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "description": "RideLog V6: EV ride, charging, service and advanced statistics logbook",
   "icons": [
     {
       "src": "icon.svg",
