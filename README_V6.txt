@@ -1,4 +1,4 @@
-RideLog V6 – Advanced Statistics
+RideLog V6.1 – Statistics, Home Battery Ring and Compact Date Selector
 ================================
 
 This is an enhancement of the supplied RideLog V5 project. The V5 source ZIP was not modified.
@@ -16,11 +16,13 @@ Data preservation
 - If you test V6 at a different website address/origin or in another browser/device, local browser data will not automatically move; use Profile > Import backup there.
 - Keep the original V5 ZIP as a rollback copy.
 
-V6 additions
+V6.1 additions
 - Monthly summary: distance, energy, charging cost, efficiency, ride count and estimated savings.
 - Yearly summary and month-by-month distance chart.
 - Best and lowest efficiency months for the selected year.
-- Selected-vehicle or all-vehicles combined statistics, with a vehicle-wise yearly breakdown.
+- Statistics can be viewed separately for each vehicle or in a third Combined view. The selection applies to charts and monthly/yearly PDF reports.
+- Home screen has one two-colour battery ring: remaining battery and used battery, with only the last-charge date beside it.
+- Log Ride uses compact day, month and year selectors instead of the large native calendar picker.
 - Monthly and yearly report generation using the browser print dialog (choose Save as PDF).
 - Historical ride energy values are no longer recalculated and overwritten on every app render.
 
